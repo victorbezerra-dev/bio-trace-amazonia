@@ -89,14 +89,22 @@ export function getEventsByBatch(batchId: string): Promise<BlockEvent[]> {
 
 export function computeInformationGain(events: BlockEvent[]): number {
   let score = 0;
+  let ratingCount = 0;
 
   for (const e of events) {
     if (e.eventType === "BATCH_CREATED") score += 2;
     if (e.eventType === "IOT_UPDATE") score += 1;
     if (e.eventType === "DISPATCHED") score += 3;
     if (e.eventType === "RECEIVED") score += 3;
-    if (e.eventType === "RATING" && e.eventData.rating >= 4) score += 2;
-    if (e.eventType === "RATING" && e.eventData.rating <= 2) score -= 3;
+
+    if (e.eventType === "RATING") {
+      ratingCount++;
+      const r = e.eventData.rating;
+
+      if (r >= 4) score += 1 * ratingCount;
+      else if (r <= 2) score -= 2 * ratingCount;
+    }
+
     if (e.eventType === "IOT_UPDATE" && e.eventData.temperature > 24) score -= 5;
     if (e.eventType === "IOT_UPDATE" && e.eventData.humidity > 90) score -= 3;
   }
