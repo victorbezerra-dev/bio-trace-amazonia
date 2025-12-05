@@ -1,0 +1,140 @@
+### ============================================
+### 1) Create Batch (returns batchId + QRCode)
+### ============================================
+
+POST http://localhost:3000/batches/create
+Content-Type: application/json
+
+###
+
+# Save returned batchId here manually or use quick replace
+@batchId = B1764954357214
+
+
+### ============================================
+### 2) IoT Event (temperature + humidity + gps)
+### ============================================
+
+POST http://localhost:3000/events/iot
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "temperature": 22.5,
+  "humidity": 81,
+  "lat": -8.751,
+  "lng": -63.872
+}
+
+###
+
+POST http://localhost:3000/events/iot
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "temperature": 23.1,
+  "humidity": 85,
+  "lat": -8.752,
+  "lng": -63.870
+}
+
+
+
+### ============================================
+### 3) Dispatch Event
+### ============================================
+
+POST http://localhost:3000/events/dispatched
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "location": "Community Storage",
+  "lat": -8.754,
+  "lng": -63.871
+}
+
+
+
+### ============================================
+### 4) Received Event
+### ============================================
+
+POST http://localhost:3000/events/received
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "location": "Processing Factory",
+  "lat": -8.900,
+  "lng": -63.910
+}
+
+
+
+### ============================================
+### 5) User Ratings (multiple ratings to test dynamic GI)
+### ============================================
+
+POST http://localhost:3000/events/rating
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "rating": 5,
+  "lat": -8.920,
+  "lng": -63.880
+}
+
+###
+
+POST http://localhost:3000/events/rating
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "rating": 4
+}
+
+###
+
+POST http://localhost:3000/events/rating
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "rating": 2
+}
+
+
+
+### ============================================
+### 6) Full History of the Batch
+### ============================================
+
+GET http://localhost:3000/batches/{{batchId}}/history
+
+
+
+### ============================================
+### 7) Certificate (GI score + medal)
+### ============================================
+
+GET http://localhost:3000/batches/{{batchId}}/certificate
+
+
+
+### ============================================
+### 8) Map Route (lat/lng)
+### ============================================
+
+GET http://localhost:3000/batches/{{batchId}}/map
+
+
+
+### ============================================
+### 9) List All Batches (pagination)
+### ============================================
+
+GET http://localhost:3000/batches?page=1&limit=10
