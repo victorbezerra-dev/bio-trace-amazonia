@@ -91,22 +91,77 @@ export function computeInformationGain(events: BlockEvent[]): number {
   let score = 0;
   let ratingCount = 0;
 
+  let hasCreated = false;
+  let hasFinalized = false;
+  let hasAnyIotUpdate = false;
+
+  type Leg = { dispatched?: boolean; received?: boolean };
+  const legs: Record<number, Leg> = {};
+  let legIndex = 0;
+
   for (const e of events) {
-    if (e.eventType === "BATCH_CREATED") score += 2;
-    if (e.eventType === "IOT_UPDATE") score += 1;
-    if (e.eventType === "DISPATCHED") score += 3;
-    if (e.eventType === "RECEIVED") score += 3;
+    if (e.eventType === "BATCH_CREATED") {
+      score += 2;
+      hasCreated = true;
+    }
+
+    if (e.eventType === "IOT_UPDATE") {
+      score += 1;
+      hasAnyIotUpdate = true;
+      if (e.eventData.temperature > 24) score -= 5;
+      if (e.eventData.humidity > 90) score -= 3;
+    }
+
+    if (e.eventType === "DISPATCHED") {
+      legIndex++;
+      if (!legs[legIndex]) legs[legIndex] = {};
+      legs[legIndex].dispatched = true;
+      score += 3;
+    }
+
+    if (e.eventType === "RECEIVED") {
+      if (!legs[legIndex]) legs[legIndex] = {};
+      legs[legIndex].received = true;
+      score += 3;
+    }
 
     if (e.eventType === "RATING") {
       ratingCount++;
       const r = e.eventData.rating;
-
       if (r >= 4) score += 1 * ratingCount;
       else if (r <= 2) score -= 2 * ratingCount;
     }
 
-    if (e.eventType === "IOT_UPDATE" && e.eventData.temperature > 24) score -= 5;
-    if (e.eventType === "IOT_UPDATE" && e.eventData.humidity > 90) score -= 3;
+    if (e.eventType === "QUALITY_INSPECTION") {
+      const r = e.eventData.rating;
+      if (r >= 4) score += 5;
+      else if (r === 3) score += 2;
+      else if (r <= 2) score -= 6;
+    }
+
+    if (e.eventType === "FINALIZED") {
+      hasFinalized = true;
+    }
+  }
+
+  if (hasFinalized) {
+    let completedLegs = 0;
+    for (const k in legs) {
+      const leg = legs[k];
+      if (leg.dispatched && leg.received) completedLegs++;
+      if (leg.dispatched && !leg.received) score -= 4;
+    }
+
+    const totalLegs = Object.keys(legs).length;
+    const ratio = totalLegs > 0 ? completedLegs / totalLegs : 0;
+
+    if (ratio === 1) score += 10;
+    else if (ratio >= 0.75) score += 6;
+    else if (ratio >= 0.5) score += 2;
+    else score -= 5;
+
+    if (!hasAnyIotUpdate) score -= 3;
+    if (!hasCreated) score -= 5;
   }
 
   return score;
