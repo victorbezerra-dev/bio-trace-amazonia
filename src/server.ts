@@ -92,6 +92,25 @@ app.post("/events/rating", async (req, res) => {
   }
 });
 
+app.post("/events/inspection", async (req, res) => {
+  try {
+    const { batchId, rating, inspector, notes, location, lat, lng } = req.body;
+
+    const block = await addBlock(batchId, "QUALITY_INSPECTION", {
+      rating,
+      inspector,
+      notes,
+      location,
+      lat,
+      lng
+    });
+
+    res.send(block);
+  } catch {
+    res.status(500).send({ error: "Failed to register quality inspection" });
+  }
+});
+
 app.get("/batches/:id/certificate", async (req, res) => {
   try {
     const batchId = req.params.id;
