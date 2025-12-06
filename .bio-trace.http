@@ -50,12 +50,12 @@ Content-Type: application/json
 
 {
   "batchId": "{{batchId}}",
+  "dispatchedBy": "Community Association Worker",
   "location": "Community Storage",
+  "notes": "Shipment left the storage in proper condition",
   "lat": -8.754,
   "lng": -63.871
 }
-
-
 
 ### ============================================
 ### 4) Received Event
@@ -66,7 +66,9 @@ Content-Type: application/json
 
 {
   "batchId": "{{batchId}}",
+  "receivedBy": "Factory Operator",
   "location": "Processing Factory",
+  "notes": "Load received intact with no visible damage",
   "lat": -8.900,
   "lng": -63.910
 }
@@ -86,7 +88,6 @@ Content-Type: application/json
   "lat": -8.7615,
   "lng": -63.9039
 }
-
 
 ### ============================================
 ### 5) User Ratings (multiple ratings to test dynamic GI)
