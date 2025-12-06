@@ -107,7 +107,22 @@ Content-Type: application/json
   "rating": 2
 }
 
+### ============================================
+### Quality Inspection Event
+### ============================================
 
+POST http://localhost:3000/events/inspection
+Content-Type: application/json
+
+{
+  "batchId": "{{batchId}}",
+  "rating": 4,
+  "inspector": "Técnico da Associação",
+  "notes": "Produto dentro da temperatura correta. Embalagem intacta.",
+  "location": "Associação Ribeirinha X",
+  "lat": -8.12345,
+  "lng": -62.56789
+}
 
 ### ============================================
 ### 6) Full History of the Batch
