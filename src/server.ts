@@ -76,6 +76,24 @@ app.post("/events/received", async (req, res) => {
   }
 });
 
+app.post("/events/finalized", async (req, res) => {
+  try {
+    const { batchId, finalizedBy, location, notes, lat, lng } = req.body;
+
+    const block = await addBlock(batchId, "FINALIZED", {
+      finalizedBy,
+      location,
+      notes,
+      lat,
+      lng
+    });
+
+    res.send(block);
+  } catch {
+    res.status(500).send({ error: "Failed to register finalization event" });
+  }
+});
+
 app.post("/events/rating", async (req, res) => {
   try {
     const { batchId, rating, lat, lng } = req.body;
