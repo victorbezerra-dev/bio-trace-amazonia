@@ -46,10 +46,12 @@ app.post("/events/iot", async (req, res) => {
 
 app.post("/events/dispatched", async (req, res) => {
   try {
-    const { batchId, location, lat, lng } = req.body;
+    const { batchId, dispatchedBy, location, notes, lat, lng } = req.body;
 
     const block = await addBlock(batchId, "DISPATCHED", {
+      dispatchedBy,
       location,
+      notes,
       lat,
       lng
     });
@@ -62,10 +64,12 @@ app.post("/events/dispatched", async (req, res) => {
 
 app.post("/events/received", async (req, res) => {
   try {
-    const { batchId, location, lat, lng } = req.body;
+    const { batchId, receivedBy, location, notes, lat, lng } = req.body;
 
     const block = await addBlock(batchId, "RECEIVED", {
+      receivedBy,
       location,
+      notes,
       lat,
       lng
     });
