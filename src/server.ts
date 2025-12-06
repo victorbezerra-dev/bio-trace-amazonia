@@ -100,12 +100,13 @@ app.post("/events/finalized", async (req, res) => {
 
 app.post("/events/rating", async (req, res) => {
   try {
-    const { batchId, rating, lat, lng } = req.body;
+    const { batchId, rating, lat, lng, userIp } = req.body;
 
     const block = await addBlock(batchId, "RATING", {
       rating,
       lat,
-      lng
+      lng,
+      userIp
     });
 
     res.send(block);
