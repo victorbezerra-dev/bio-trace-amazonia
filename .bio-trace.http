@@ -71,6 +71,21 @@ Content-Type: application/json
   "lng": -63.910
 }
 
+### ============================================
+### FINALIZED EVENT
+### ============================================
+
+POST http://localhost:3000/events/finalized
+Content-Type: application/json
+
+{
+  "batchId": "B1234567890000",
+  "finalizedBy": "Mercado Central",
+  "location": "Filial Porto Velho - Centro",
+  "notes": "Lote processado e encerrado com sucesso",
+  "lat": -8.7615,
+  "lng": -63.9039
+}
 
 
 ### ============================================
