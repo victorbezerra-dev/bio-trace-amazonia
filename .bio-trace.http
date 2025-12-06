@@ -100,7 +100,8 @@ Content-Type: application/json
   "batchId": "{{batchId}}",
   "rating": 5,
   "lat": -8.920,
-  "lng": -63.880
+  "lng": -63.880,
+  "userIp": "187.22.45.101"
 }
 
 ###
@@ -110,7 +111,8 @@ Content-Type: application/json
 
 {
   "batchId": "{{batchId}}",
-  "rating": 4
+  "rating": 4,
+  "userIp": "187.22.45.101"
 }
 
 ###
@@ -120,8 +122,10 @@ Content-Type: application/json
 
 {
   "batchId": "{{batchId}}",
-  "rating": 2
+  "rating": 2,
+  "userIp": "187.22.45.101"
 }
+
 
 ### ============================================
 ### Quality Inspection Event
